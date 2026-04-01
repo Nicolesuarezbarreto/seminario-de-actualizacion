@@ -40,12 +40,12 @@ button {
     cursor: pointer;
 }
 
-/* Colores basados en tu imagen */
+
 .btn-azul { background-color: #4A90E2; box-shadow: 0px 4px #357ABD; }
 .btn-verde { background-color: #7ED321; box-shadow: 0px 4px #69B01C; }
 .btn-naranja { background-color: #F5A623; box-shadow: 0px 4px #D48C1C; }
 
-/* El estilo específico que te dieron en el PDF */
+
 .vestimenta-boton-borrar {
     color: white;
     font-family: arial;
