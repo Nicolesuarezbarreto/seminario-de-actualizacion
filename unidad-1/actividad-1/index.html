@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Calculadora - Actividad 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="contenedor-calculadora">
+        <input type="text" id="pantalla" value="0" readonly>
+
+        <table>
+            <tr>
+                <td><button class="btn-azul" onclick="agregar('7')">7</button></td>
+                <td><button class="btn-azul" onclick="agregar('8')">8</button></td>
+                <td><button class="btn-azul" onclick="agregar('9')">9</button></td>
+                <td><button class="btn-verde" onclick="agregar('+')">+</button></td>
+            </tr>
+            <tr>
+                <td><button class="btn-azul" onclick="agregar('4')">4</button></td>
+                <td><button class="btn-azul" onclick="agregar('5')">5</button></td>
+                <td><button class="btn-azul" onclick="agregar('6')">6</button></td>
+                <td><button class="btn-verde" onclick="agregar('-')">-</button></td>
+            </tr>
+            <tr>
+                <td><button class="btn-azul" onclick="agregar('3')">3</button></td>
+                <td><button class="btn-azul" onclick="agregar('2')">2</button></td>
+                <td><button class="btn-azul" onclick="agregar('1')">1</button></td>
+                <td><button class="btn-verde" onclick="agregar('*')">*</button></td>
+            </tr>
+            <tr>
+                <td><button class="btn-azul" onclick="agregar('0')">0</button></td>
+                <td><button class="btn-azul" onclick="agregar('.')">.</button></td>
+                <td><button class="btn-naranja" onclick="calcular()">=</button></td>
+                <td><button class="btn-verde" onclick="agregar('/')">/</button></td>
+            </tr>
+        </table>
+
+        <button class="vestimenta-boton-borrar" onclick="limpiar()">Borrar</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
