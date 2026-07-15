@@ -1,6 +1,5 @@
 /**
  * WCApplicationView
- * Componente principal cumpliendo estrictamente con las consignas del profesor.
  */
 class WCApplicationView extends HTMLElement {
     constructor() {
@@ -24,7 +23,7 @@ class WCApplicationView extends HTMLElement {
     }
 
     createNavbar() {
-        // BLOQUE 1: Construcción de elementos
+        //Construcción de elementos
         const nav = document.createElement("div");
         const bar = document.createElement("div");
         const logoDiv = document.createElement("div");
@@ -45,7 +44,7 @@ class WCApplicationView extends HTMLElement {
         const circle = document.createElement("div");
         const iUser = document.createElement("i");
 
-        // BLOQUE 2: Asignación de clases y estilos
+        //Asignación de clases y estilos
         nav.classList.add("w3-top", "w3-card");
         nav.style.height = "54px";
         bar.classList.add("w3-flex-bar", "w3-theme", "w3-left-align");
@@ -84,7 +83,7 @@ class WCApplicationView extends HTMLElement {
         iUser.classList.add("fa", "fa-fw", "fa-user");
         iUser.style.marginTop = "11px";
 
-        // Ensamblaje (Sin innerHTML)
+        // Ensamblaje
         aLogo.append(img, " W3Admin");
         h5.appendChild(aLogo);
         logoDiv.appendChild(h5);
@@ -102,13 +101,12 @@ class WCApplicationView extends HTMLElement {
         return nav;
     }
 
-    // Manejador de evento (Semántica adecuada y sin función flecha)
+    // Manejador de evento
     onSearchTriggerClick(event) {
         event.target.parentNode.children[1].focus();
     }
 
     connectedCallback() {
-        // Vinculación mediante bind(this)
         const searchTrigger = this.shadowRoot.querySelector('#search-trigger');
         if (searchTrigger) {
             searchTrigger.onclick = this.onSearchTriggerClick.bind(this);
@@ -116,7 +114,6 @@ class WCApplicationView extends HTMLElement {
     }
 
     disconnectedCallback() {
-        // Limpieza de evento
         const searchTrigger = this.shadowRoot.querySelector('#search-trigger');
         if (searchTrigger) {
             searchTrigger.onclick = null;
@@ -124,5 +121,4 @@ class WCApplicationView extends HTMLElement {
     }
 }
 
-// Registro del elemento
 customElements.define('wc-application-view', WCApplicationView);
