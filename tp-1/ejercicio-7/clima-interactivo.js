@@ -1,59 +1,55 @@
-// Extendemos el componente del punto 6 (la clase ya existe en la memoria global gracias al HTML)
 class ClimaInteractivoMdP extends ClimaTablaMdP {
     constructor() {
         super();
-        this.esCelsius = true;
+        this._botonRef = null;
+        this._esCelsius = true; // Variable de estado para controlar la conversión
     }
 
     connectedCallback() {
-        super.render(); // Llama al render de la clase padre
-        this.agregarBotonAlternar();
+        super._render();
+        this._crearBoton();
     }
 
-    agregarBotonAlternar() {
-        const contenedorBoton = document.createElement('div');
-        contenedorBoton.style.marginBottom = '15px';
-
-        const boton = document.createElement('button');
-        boton.innerText = "Cambiar a Fahrenheit (°F)";
-        boton.style.padding = "8px 15px";
-        boton.style.cursor = "pointer";
-        boton.style.fontWeight = "bold";
-        boton.style.backgroundColor = "#0645ad";
-        boton.style.color = "white";
-        boton.style.border = "none";
-        boton.style.borderRadius = "4px";
-
-        boton.onclick = () => {
-            this.esCelsius = !this.esCelsius;
-            if (this.esCelsius) {
-                boton.innerText = "Cambiar a Fahrenheit (°F)";
-                this.convertirTablaA('C');
-            } else {
-                boton.innerText = "Cambiar a Celsius (°C)";
-                this.convertirTablaA('F');
-            }
-        };
-
-        contenedorBoton.appendChild(boton);
-        this.shadowRoot.insertBefore(contenedorBoton, this.shadowRoot.querySelector('table'));
+    _crearBoton() {
+        this._botonRef = document.createElement('button');
+        // El texto cambia según el estado
+        this._botonRef.textContent = this._esCelsius ? 'Cambiar a Fahrenheit' : 'Cambiar a Celsius';
+        this._botonRef.style.marginTop = '10px';
+        this._botonRef.onclick = this._alternarUnidades.bind(this);
+        this.shadowRoot.appendChild(this._botonRef);
     }
 
-    convertirTablaA(unidad) {
-        const filas = this.shadowRoot.querySelectorAll('tr');
-        for (let i = 1; i <= 3; i++) {
-            const celdas = filas[i].querySelectorAll('td');
-            for (let j = 1; j < celdas.length; j++) {
-                let valorActual = parseFloat(celdas[j].innerText);
-                if (unidad === 'F') {
-                    let fahrenheit = (valorActual * 1.8) + 32;
-                    celdas[j].innerText = fahrenheit.toFixed(1);
+    disconnectedCallback() {
+        if (this._botonRef) {
+            this._botonRef.onclick = null;
+        }
+    }
+
+    _alternarUnidades() {
+        for (let i = 0; i < this.datos.length; i++) {
+            for (let j = 0; j < this.datos[i].valores.length; j++) {
+                let valorActual = parseFloat(this.datos[i].valores[j]);
+                
+                if (this._esCelsius) {
+                    // Convertir a Fahrenheit
+                    this.datos[i].valores[j] = ((valorActual * 9 / 5) + 32).toFixed(1);
                 } else {
-                    let celsius = (valorActual - 32) / 1.8;
-                    celdas[j].innerText = celsius.toFixed(1);
+                    // Convertir de vuelta a Celsius
+                    this.datos[i].valores[j] = ((valorActual - 32) * 5 / 9).toFixed(1);
                 }
             }
         }
+
+        // Invertimos el estado
+        this._esCelsius = !this._esCelsius;
+
+        // Limpiar y redibujar
+        while (this.shadowRoot.firstChild) {
+            this.shadowRoot.removeChild(this.shadowRoot.firstChild);
+        }
+        
+        super._render();
+        this._crearBoton();
     }
 }
 

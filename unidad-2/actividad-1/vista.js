@@ -1,33 +1,28 @@
-class MiCalculadora extends HTMLElement {
+class CalculadoraVista extends HTMLElement {
     constructor() {
-
         super();
         this.attachShadow({ mode: 'open' });
-        this.pantalla = "0";
 
-        //Definición y creación de miembros del elemento (Sin innerHTML)
         this.contenedor = document.createElement('div');
         this.contenedor.className = 'contenedor-calculadora';
 
         this.inputPantalla = document.createElement('input');
         this.inputPantalla.type = 'text';
         this.inputPantalla.id = 'pantalla';
-        this.inputPantalla.value = this.pantalla;
+        this.inputPantalla.value = "0";
         this.inputPantalla.readOnly = true;
         this.contenedor.appendChild(this.inputPantalla);
 
         this.tabla = document.createElement('table');
-        this.botones = []; // Guardamos referencias para usar en connectedCallback
+        this.botones = []; 
 
-    
         const estructuraBotones = [
             [{ val: '7', cls: 'btn-azul' }, { val: '8', cls: 'btn-azul' }, { val: '9', cls: 'btn-azul' }, { val: '+', cls: 'btn-verde' }],
             [{ val: '4', cls: 'btn-azul' }, { val: '5', cls: 'btn-azul' }, { val: '6', cls: 'btn-azul' }, { val: '-', cls: 'btn-verde' }],
             [{ val: '3', cls: 'btn-azul' }, { val: '2', cls: 'btn-azul' }, { val: '1', cls: 'btn-azul' }, { val: '*', cls: 'btn-verde' }],
-            [{ val: '0', cls: 'btn-azul' }, { val: '.', cls: 'btn-azul' }, { val: '=', cls: 'btn-naranja', accion: 'igual' }, { val: '/', cls: 'btn-verde' }]
+            [{ val: '0', cls: 'btn-azul' }, { val: '.', cls: 'btn-azul' }, { val: '=', cls: 'btn-naranja' }, { val: '/', cls: 'btn-verde' }]
         ];
 
-    
         for (let i = 0; i < estructuraBotones.length; i++) {
             let fila = document.createElement('tr');
             for (let j = 0; j < estructuraBotones[i].length; j++) {
@@ -38,9 +33,6 @@ class MiCalculadora extends HTMLElement {
                 boton.innerText = datos.val;
                 boton.className = datos.cls;
                 boton.dataset.valor = datos.val;
-                if (datos.accion) {
-                    boton.dataset.accion = datos.accion;
-                }
 
                 this.botones.push(boton);
                 celda.appendChild(boton);
@@ -55,9 +47,8 @@ class MiCalculadora extends HTMLElement {
         this.btnBorrar.className = 'borrar';
         this.contenedor.appendChild(this.btnBorrar);
 
-        //Estilos encapsulados creados como nodo del DOM
-        this.estilos = document.createElement('style');
-        this.estilos.textContent = `
+        const estilos = document.createElement('style');
+        estilos.textContent = `
             .contenedor-calculadora {
                 background-color: white; padding: 20px; border-radius: 10px;
                 box-shadow: 0px 0px 10px rgba(0,0,0,0.1); width: 250px;
@@ -72,69 +63,34 @@ class MiCalculadora extends HTMLElement {
                 width: 100%; height: 50px; border-radius: 8px; border: none;
                 font-weight: bold; font-size: 18px; color: white; cursor: pointer;
             }
-            .btn-azul { background-color: #4A90E2; box-shadow: 0px 4px #357ABD; }
-            .btn-verde { background-color: #7ED321; box-shadow: 0px 4px #69B01C; }
-            .btn-naranja { background-color: #F5A623; box-shadow: 0px 4px #D48C1C; }
-            .borrar { background-color: red; box-shadow: 0px 5px #BB3E22; height: 30px; margin-top: 10px; }
-            button:active { transform: translateY(2px); box-shadow: 0px 2px #333; }
+            .btn-azul { background-color: #4A90E2; }
+            .btn-verde { background-color: #7ED321; }
+            .btn-naranja { background-color: #F5A623; }
+            .borrar { background-color: red; width: 100%; height: 40px; margin-top: 10px; }
+            button:active { transform: translateY(2px); }
         `;
 
-        //Agregar elementos al Shadow DOM en el constructor
-        this.shadowRoot.appendChild(this.estilos);
+        this.shadowRoot.appendChild(estilos);
         this.shadowRoot.appendChild(this.contenedor);
+        this.manejador = null;
     }
+
+    registrarControlador(fn) { this.manejador = fn; }
 
     connectedCallback() {
         for (let i = 0; i < this.botones.length; i++) {
-            this.botones[i].onclick = this.manejadorBoton.bind(this);
+            this.botones[i].onclick = this.clickBtn.bind(this);
         }
-        this.btnBorrar.onclick = this.limpiar.bind(this);
+        this.btnBorrar.onclick = this.clickBorrar.bind(this);
     }
 
     disconnectedCallback() {
-        for (let i = 0; i < this.botones.length; i++) {
-            this.botones[i].onclick = null;
-        }
+        for (let i = 0; i < this.botones.length; i++) this.botones[i].onclick = null;
         this.btnBorrar.onclick = null;
     }
 
-    manejadorBoton(e) {
-        let valor = e.target.dataset.valor;
-        let accion = e.target.dataset.accion;
-
-        if (accion === 'igual') {
-            this.calcular();
-        } else if (valor) {
-            this.agregar(valor);
-        }
-    }
-
-    agregar(valor) {
-        if (this.pantalla === "0" || this.pantalla === "Error") {
-            this.pantalla = valor;
-        } else {
-            this.pantalla += valor;
-        }
-        this.actualizarPantalla();
-    }
-
-    limpiar() {
-        this.pantalla = "0";
-        this.actualizarPantalla();
-    }
-
-    calcular() {
-        try {
-            this.pantalla = eval(this.pantalla).toString();
-        } catch {
-            this.pantalla = "Error";
-        }
-        this.actualizarPantalla();
-    }
-
-    actualizarPantalla() {
-        this.inputPantalla.value = this.pantalla;
-    }
+    clickBtn(e) { if(this.manejador) this.manejador(e.target.dataset.valor); }
+    clickBorrar() { if(this.manejador) this.manejador('BORRAR'); }
+    actualizar(val) { this.inputPantalla.value = val; }
 }
-
-customElements.define("mi-calculadora", MiCalculadora);
+customElements.define("calculadora-vista", CalculadoraVista);

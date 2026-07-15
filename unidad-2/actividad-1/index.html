@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Calculadora MVC - Web Component</title>
+</head>
+<body>
+
+    <script src="modelo.js"></script>
+    <script src="vista.js"></script>
+    <script src="controlador.js"></script>
+    <script>
+        function main() {
+            // Instancia las 3 partes de la arquitectura MVC
+            let modelo = new CalculadoraModelo();
+            let vista = document.createElement('calculadora-vista');
+            
+            // Coloca la vista en el DOM (esto activará su connectedCallback)
+            document.body.appendChild(vista);
+
+            // Conecta todo a través del Controlador
+            let controlador = new CalculadoraControlador(modelo, vista);
+        }
+
+        window.onload = main;
+    </script>
+</body>
+</html>
