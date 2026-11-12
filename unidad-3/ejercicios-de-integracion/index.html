@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <title>Unidad 4 - Integración MVC</title>
+    
+    <script src="MVCCanvas.js"></script>
+    
+    <script src="ejercicio-6.js"></script>
+    <script src="ejercicio-12.js"></script>
+    <script src="ejercicio-19.js"></script>
+</head>
+<body>
+    <p> prompt circulo: {"tipo": "circulo", "x": 150, "y": 150, "radio": 50} </p>
+    <p> prompt triangulo: {"tipo": "poligono", "puntos": [{"x": 200, "y": 50}, {"x": 280, "y": 180}, {"x": 120, "y": 180}]}</p>
+    <p> prompt Grafico torta {"tipo": "cakeGraph", "x": 400, "y": 300, "radio": 120, "valores": [35, 25, 40]} </p>
+
+    <script>
+    
+        function main() {
+            let h1 = document.createElement('h1');
+            h1.innerText = 'Pantalla de Inicio - Unidad 4';
+            document.body.appendChild(h1);
+
+            let btnEj6 = document.createElement('button');
+            btnEj6.innerText = 'Ejercicio 6 (Integración)';
+            btnEj6.style.padding = '10px 15px';
+            btnEj6.style.margin = '10px';
+            btnEj6.style.fontWeight = 'bold';
+            btnEj6.style.cursor = 'pointer';
+
+            btnEj6.onclick = () => {
+                iniciarEjercicio6();
+            };
+
+            let btnEj12 = document.createElement('button');
+            btnEj12.innerText = 'Ejercicio 12 (Integración)';
+            btnEj12.style.padding = '10px 15px';
+            btnEj12.style.margin = '10px';
+            btnEj12.style.fontWeight = 'bold';
+            btnEj12.style.cursor = 'pointer';
+
+            btnEj12.onclick = () => {
+                iniciarEjercicio12();
+            };
+
+            let btnEj19 = document.createElement('button');
+            btnEj19.innerText = 'Ejercicio 19 (Integración)';
+            btnEj19.style.padding = '10px 15px';
+            btnEj19.style.margin = '10px';
+            btnEj19.style.fontWeight = 'bold';
+            btnEj19.style.cursor = 'pointer';
+
+            btnEj19.onclick = () => {
+                iniciarEjercicio19();
+            };
+
+            document.body.appendChild(btnEj6);
+            document.body.appendChild(btnEj12);
+            document.body.appendChild(btnEj19);
+        }
+        
+        window.onload = main;
+    </script>
+
+</body>
+</html>
